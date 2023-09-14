@@ -5,6 +5,7 @@ import { LoginDto, RegisterDto } from '../dto';
 
 import { User } from 'src/users';
 import { MyResponse } from 'src/core';
+import { LoginResponse } from '../interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -16,7 +17,7 @@ export class AuthController {
   }
 
   @Post('login')
-  login(@Body() loginDto: LoginDto): Promise<MyResponse<User>> {
+  login(@Body() loginDto: LoginDto): Promise<MyResponse<LoginResponse>> {
     return this.authService.login(loginDto);
   }
 }
