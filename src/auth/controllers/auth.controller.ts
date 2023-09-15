@@ -6,6 +6,7 @@ import { ChangePasswordDto, LoginDto, RegisterDto } from '../dto';
 import { User } from 'src/users';
 import { MyResponse } from 'src/core';
 import { LoginResponse } from '../interfaces';
+import { Auth } from '../decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,7 @@ export class AuthController {
   }
 
   @Post('change-password')
+  @Auth()
   changePassword(@Body() changePasswordDto: ChangePasswordDto) {
     return this.authService.changePassword(changePasswordDto);
   }
