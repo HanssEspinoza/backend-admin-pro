@@ -1,7 +1,6 @@
 import {
   IsNotEmpty,
   IsString,
-  IsUUID,
   Matches,
   MaxLength,
   MinLength,
@@ -20,8 +19,4 @@ export class ChangePasswordDto {
       'La contraseña debe tener al menos una mayúscula, una minúscula, un número y un carácter especial',
   })
   new_password: string;
-
-  @IsString()
-  @IsUUID()
-  user_id: string;
 }

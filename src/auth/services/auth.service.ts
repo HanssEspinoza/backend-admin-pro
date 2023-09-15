@@ -98,8 +98,44 @@ export class AuthService {
     return response;
   }
 
-  async changePassword(changePasswordDto: ChangePasswordDto) {
-    return changePasswordDto;
+  async changePassword(
+    changePasswordDto: ChangePasswordDto,
+    decoratorUser: User,
+  ) {
+    const { old_password, new_password } = changePasswordDto;
+
+    const user = await this.userRepository.findOne({
+      where: { user_id: decoratorUser.user_id },
+      select: {
+        password: true,
+      },
+    });
+
+    if (!bcrypt.compareSync(old_password, user.password))
+      throw new BadRequestException('Las credenciales no son validas');
+
+    try {
+      const encodedPassword = bcrypt.hashSync(new_password, 10);
+
+      const patchUser = await this.userRepository.preload({
+        user_id: decoratorUser.user_id,
+        password: encodedPassword,
+      });
+
+      await this.userRepository.save(patchUser);
+
+      const response: MyResponse<{}> = {
+        statusCode: 200,
+        status: 'Ok',
+        message: 'La Contraseña se cambio con éxito',
+        reply: {},
+      };
+
+      return response;
+    } catch (error) {
+      console.log(error);
+      this.handleDBErrors(error);
+    }
   }
 
   private getJwtToken(payload: JwtPayload): string {
