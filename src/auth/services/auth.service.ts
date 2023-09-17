@@ -124,7 +124,7 @@ export class AuthService {
 
       await this.userRepository.save(patchUser);
 
-      const response: MyResponse<{}> = {
+      const response: MyResponse<Record<string, never>> = {
         statusCode: 200,
         status: 'Ok',
         message: 'La Contraseña se cambio con éxito',
