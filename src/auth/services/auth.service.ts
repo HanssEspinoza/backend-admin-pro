@@ -126,7 +126,7 @@ export class AuthService {
 
       const response: MyResponse<Record<string, never>> = {
         statusCode: 200,
-        status: 'Ok',
+        status: 'OK',
         message: 'La Contraseña se cambio con éxito',
         reply: {},
       };
