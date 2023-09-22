@@ -87,10 +87,7 @@ export class AuthService {
       status: 'Created',
       message: 'Usuario encontrado con éxito',
       reply: {
-        user_id: user.user_id,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
+        user,
         token,
       },
     };
