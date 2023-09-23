@@ -135,6 +135,15 @@ export class AuthService {
     }
   }
 
+  checkToken(user: User) {
+    const token = this.getJwtToken({ sub: user.user_id, user: user.email });
+
+    return {
+      user,
+      token,
+    };
+  }
+
   private getJwtToken(payload: JwtPayload): string {
     const token = this.jwtService.sign(payload);
     return token;
