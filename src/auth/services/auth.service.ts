@@ -11,7 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { ChangePasswordDto, LoginDto, RegisterDto } from '../dto';
 import { User } from 'src/users';
 import { MyResponse } from 'src/core';
-import { JwtPayload, LoginResponse } from '../interfaces';
+import { CheckTokenResponse, JwtPayload, LoginResponse } from '../interfaces';
 
 @Injectable()
 export class AuthService {
@@ -135,13 +135,20 @@ export class AuthService {
     }
   }
 
-  checkToken(user: User) {
+  checkToken(user: User): MyResponse<CheckTokenResponse> {
     const token = this.getJwtToken({ sub: user.user_id, user: user.email });
 
-    return {
-      user,
-      token,
+    const response: MyResponse<CheckTokenResponse> = {
+      statusCode: 200,
+      status: 'OK',
+      message: 'La Contraseña se cambio con éxito',
+      reply: {
+        user,
+        token,
+      },
     };
+
+    return response;
   }
 
   private getJwtToken(payload: JwtPayload): string {
