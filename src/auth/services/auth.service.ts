@@ -66,6 +66,7 @@ export class AuthService {
         first_name: true,
         last_name: true,
         email: true,
+        is_active: true,
       },
     });
 
@@ -75,24 +76,29 @@ export class AuthService {
     if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException('Las credenciales no son validas');
 
-    delete user.password, delete user.is_active;
+    delete user.password;
 
-    const token = this.getJwtToken({
-      sub: user.user_id,
-      user: user.email,
-    });
+    if (user.is_active === false) {
+      throw new UnauthorizedException(
+        'El usuario no esta activo, comunicarse con un administrador',
+      );
+    } else {
+      const token = this.getJwtToken({
+        sub: user.user_id,
+        user: user.email,
+      });
+      const response: MyResponse<LoginResponse> = {
+        statusCode: 201,
+        status: 'Created',
+        message: 'Usuario encontrado con éxito',
+        reply: {
+          user,
+          token,
+        },
+      };
 
-    const response: MyResponse<LoginResponse> = {
-      statusCode: 201,
-      status: 'Created',
-      message: 'Usuario encontrado con éxito',
-      reply: {
-        user,
-        token,
-      },
-    };
-
-    return response;
+      return response;
+    }
   }
 
   async changePassword(
