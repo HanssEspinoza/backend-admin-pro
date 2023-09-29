@@ -1,14 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AnimalsService } from './animals.service';
-import { CreateAnimalDto } from './dto/create-animal.dto';
-import { UpdateAnimalDto } from './dto/update-animal.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+
+import { AnimalsService } from '../services';
+import { CreateAnimalDto, UpdateAnimalDto } from '../dto';
+import { MyResponse } from 'src/core';
+import { Animal } from '../entities';
 
 @Controller('animals')
 export class AnimalsController {
   constructor(private readonly animalsService: AnimalsService) {}
 
   @Post()
-  create(@Body() createAnimalDto: CreateAnimalDto) {
+  create(
+    @Body() createAnimalDto: CreateAnimalDto,
+  ): Promise<MyResponse<Animal>> {
     return this.animalsService.create(createAnimalDto);
   }
 

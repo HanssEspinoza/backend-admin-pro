@@ -44,13 +44,13 @@ export class User {
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  create_at: Date;
+  created_at: Date;
 
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  update_at: Date;
+  updated_at: Date;
 
   @BeforeInsert()
   checkFieldsBeforeInsert(): void {
