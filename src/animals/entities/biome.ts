@@ -2,19 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Species } from './species.entity';
 
-import { Animal } from './animal.entity';
-import { Biome } from './biome';
-
-@Entity('species')
-export class Species {
+@Entity('biome')
+export class Biome {
   @PrimaryGeneratedColumn('uuid')
-  species_id: string;
+  biome_id: string;
 
   @Column('text', {
     unique: true,
@@ -22,16 +19,10 @@ export class Species {
   name: string;
 
   @Column('text')
-  description: string;
+  image_url: string;
 
-  @Column('text')
-  scientific_name: string;
-
-  @OneToMany(() => Animal, (animal) => animal.species)
-  animals: Animal[];
-
-  @ManyToOne(() => Biome, (biome) => biome.species)
-  biome: Biome;
+  @OneToMany(() => Species, (species) => species.biome)
+  species: Species[];
 
   @CreateDateColumn({
     type: 'timestamptz',

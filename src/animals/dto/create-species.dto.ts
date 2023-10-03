@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, MinLength } from 'class-validator';
 
 export class CreateSpeciesDto {
   @IsString()
@@ -13,4 +13,7 @@ export class CreateSpeciesDto {
   @IsNotEmpty()
   @MinLength(15)
   description: string;
+
+  @IsUUID()
+  biome_id: string;
 }
