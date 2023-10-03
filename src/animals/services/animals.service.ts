@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateAnimalDto } from '../dto/create-animal.dto';
@@ -53,8 +57,23 @@ export class AnimalsService {
     return `This action returns all animals`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} animal`;
+  async findOne(animal_id: string): Promise<MyResponse<Animal>> {
+    const animal = await this.animalRepository.findOne({
+      where: { animal_id },
+      relations: ['species', 'species.biome'],
+    });
+
+    if (!animal)
+      throw new NotFoundException(`El animal #${animal_id} no fue encontrado.`);
+
+    const response: MyResponse<Animal> = {
+      statusCode: 200,
+      status: 'OK',
+      message: `El animal ${animal.name} fue encontrado con éxito`,
+      reply: animal,
+    };
+
+    return response;
   }
 
   update(id: number, updateAnimalDto: UpdateAnimalDto) {
