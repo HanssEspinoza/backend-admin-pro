@@ -7,10 +7,10 @@ import {
   SpeciesController,
   BiomeController,
 } from './controllers';
-import { Animal, Biome, Species } from './entities';
+import { Animal, Biome, MedicalRecord, Species } from './entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Animal, Species, Biome])],
+  imports: [TypeOrmModule.forFeature([Animal, Species, Biome, MedicalRecord])],
   controllers: [AnimalsController, SpeciesController, BiomeController],
   providers: [AnimalsService, SpeciesService, BiomeService],
 })

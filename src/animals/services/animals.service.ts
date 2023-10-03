@@ -60,7 +60,7 @@ export class AnimalsService {
   async findOne(animal_id: string): Promise<MyResponse<Animal>> {
     const animal = await this.animalRepository.findOne({
       where: { animal_id },
-      relations: ['species', 'species.biome'],
+      relations: ['species', 'species.biome', 'medical_record'],
     });
 
     if (!animal)

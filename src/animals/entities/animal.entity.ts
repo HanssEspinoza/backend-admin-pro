@@ -2,12 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { Species } from './species.entity';
+import { MedicalRecord } from './medical_record.entity';
 
 @Entity('animal')
 export class Animal {
@@ -42,6 +45,10 @@ export class Animal {
 
   @ManyToOne(() => Species, (species) => species.animals)
   species: Species;
+
+  @OneToOne(() => MedicalRecord, { cascade: true })
+  @JoinColumn()
+  medical_record: MedicalRecord;
 
   @CreateDateColumn({
     type: 'timestamptz',
