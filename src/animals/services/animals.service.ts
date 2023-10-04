@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateAnimalDto } from '../dto/create-animal.dto';
 import { UpdateAnimalDto } from '../dto/update-animal.dto';
-import { Animal, Species } from '../entities';
+import { Animal, Diet, Species } from '../entities';
 import { Repository } from 'typeorm';
 import { MyResponse } from 'src/core';
 
@@ -19,19 +19,37 @@ export class AnimalsService {
 
     @InjectRepository(Species)
     private readonly speciesRepository: Repository<Species>,
+
+    @InjectRepository(Diet)
+    private readonly dietRepository: Repository<Diet>,
   ) {}
 
   async create(createAnimalDto: CreateAnimalDto): Promise<MyResponse<Animal>> {
     const { species_id, ...allData } = createAnimalDto;
 
-    const species = await this.speciesRepository.findOneBy({
+    const diets: Diet[] = [];
+
+    for (const diet_id of allData.diets) {
+      const diet = await this.dietRepository.findOneBy({ diet_id });
+
+      if (diet) {
+        diets.push(diet);
+      } else {
+        throw new NotFoundException(`La dieta #${diet_id} no existe`);
+      }
+    }
+
+    const species = await this.speciesRepository.preload({
       species_id,
+      diets,
     });
 
     if (!species)
       throw new NotFoundException(`La especie #${species_id} no existe`);
 
     try {
+      await this.speciesRepository.save(species);
+
       const animal = await this.animalRepository.create({
         ...allData,
         species: species,
@@ -71,7 +89,12 @@ export class AnimalsService {
   async findOne(animal_id: string): Promise<MyResponse<Animal>> {
     const animal = await this.animalRepository.findOne({
       where: { animal_id },
-      relations: ['species', 'species.biome', 'medical_record'],
+      relations: [
+        'species',
+        'species.biome',
+        'species.diets',
+        'medical_record',
+      ],
     });
 
     if (!animal)

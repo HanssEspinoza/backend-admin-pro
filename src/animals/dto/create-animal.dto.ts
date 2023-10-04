@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDateString,
   IsIn,
   IsInt,
@@ -29,6 +30,10 @@ export class CreateAnimalDto {
 
   @IsUUID()
   species_id: string;
+
+  @IsArray()
+  @IsUUID(undefined, { each: true })
+  diets: string[];
 
   @IsString()
   @IsIn(['healthy', 'sick', 'injured'])
