@@ -13,8 +13,10 @@ import { AnimalsService } from '../services';
 import { CreateAnimalDto, UpdateAnimalDto } from '../dto';
 import { MyResponse } from 'src/core';
 import { Animal } from '../entities';
+import { Auth } from 'src/auth/decorators';
 
 @Controller('animals')
+@Auth()
 export class AnimalsController {
   constructor(private readonly animalsService: AnimalsService) {}
 

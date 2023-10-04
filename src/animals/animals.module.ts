@@ -14,10 +14,12 @@ import {
   DietController,
 } from './controllers';
 import { Animal, Biome, Diet, MedicalRecord, Species } from './entities';
+import { AuthModule } from 'src/auth';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Animal, Species, Biome, MedicalRecord, Diet]),
+    AuthModule,
   ],
   controllers: [
     AnimalsController,
