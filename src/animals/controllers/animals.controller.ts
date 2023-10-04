@@ -26,7 +26,7 @@ export class AnimalsController {
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<MyResponse<Animal[]>> {
     return this.animalsService.findAll();
   }
 
@@ -37,13 +37,18 @@ export class AnimalsController {
     return this.animalsService.findOne(animal_id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAnimalDto: UpdateAnimalDto) {
-    return this.animalsService.update(+id, updateAnimalDto);
+  @Patch(':animal_id')
+  update(
+    @Param('animal_id', ParseUUIDPipe) animal_id: string,
+    @Body() updateAnimalDto: UpdateAnimalDto,
+  ): Promise<MyResponse<Animal>> {
+    return this.animalsService.update(animal_id, updateAnimalDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.animalsService.remove(+id);
+  @Delete(':animal_id')
+  remove(
+    @Param('animal_id', ParseUUIDPipe) animal_id: string,
+  ): Promise<MyResponse<Record<string, never>>> {
+    return this.animalsService.remove(animal_id);
   }
 }
